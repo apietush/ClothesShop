@@ -4,7 +4,7 @@ using UnityEngine;
 public class Offer
 {
     public string Id;
-    public float Price;
+    public int Price;
     public Sprite Icon;
     public ClothesType ClothesType;
 }

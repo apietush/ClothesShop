@@ -14,6 +14,12 @@ public class ShopMenu : MonoBehaviour
     [SerializeField] private Image CurrentItemSprite;
     [SerializeField] private TextMeshProUGUI CurrentItemPrice;
 
+    [SerializeField] private TextMeshProUGUI BuyButtonText;
+    [SerializeField] private TextMeshProUGUI GoldAmount;
+    [SerializeField] private Button BuyButton;
+    [SerializeField] private Button SellButton;
+
+    [SerializeField] private Player player;
 
     private LinkedList<Offer> _currentList;
     private int _index;
@@ -56,17 +62,54 @@ public class ShopMenu : MonoBehaviour
         ChangeCurrentItem();
     }
 
+    public void OnBuyPressed()
+    {
+        var offer = _currentList.ElementAt(_index);
+        if (player.PlayerState.OwnedOffers.Contains(offer) )
+        {
+            return;
+        }
+        player.PlayerState.OwnedOffers.Add(offer);
+        player.PlayerState.GoldAmount -=offer.Price;
+
+        BuyButtonText.text = player.PlayerState.OwnedOffers.Contains(offer) ? "Equip" : "Buy";
+    }
+
+    public void OnSellPressed()
+    {
+        var offer = _currentList.ElementAt(_index);
+        if (player.PlayerState.OwnedOffers.Contains(offer) == false)
+        {
+            return;
+        }
+
+        player.PlayerState.OwnedOffers.Remove(offer);
+        player.PlayerState.GoldAmount += offer.Price - 5;
+    }
+
+    public void OnCloseClicked()
+    {
+        gameObject.SetActive(false);
+    }
+
     private void ChangeCurrentItem()
     {
         var offer = _currentList.ElementAt(_index);
 
         CurrentItemSprite.sprite = offer.Icon;
         CurrentItemPrice.text = offer.Price.ToString();
+
+        BuyButtonText.text = player.PlayerState.OwnedOffers.Contains(offer) ? "Equip" : "Buy";
     }
 
 
     // Update is called once per frame
     public void Update()
     {
+        var offer = _currentList.ElementAt(_index);
+
+        GoldAmount.text = $"Gold: {player.PlayerState.GoldAmount.ToString()}";
+        BuyButton.interactable = offer.Price <= player.PlayerState.GoldAmount;
+        SellButton.interactable = player.PlayerState.OwnedOffers.Contains(offer);
     }
 }
