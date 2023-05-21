@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 
@@ -9,7 +7,7 @@ public class Player : MonoBehaviour
 
     private float _xVelocity;
     private float _yVelocity;
-    private Collider2D interactable;
+    private Collider2D _interactable;
     private Rigidbody2D rigidbody;
 
     // Start is called before the first frame update
@@ -26,17 +24,17 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        interactable = collider;
+        _interactable = collider;
     }
 
     private void OnTriggerExit2D(Collider2D collider)
     {
-        interactable = null;
+        _interactable = null;
     }
 
     public void TryInteract()
     {
-        if (interactable?.tag == "ShopTrigger")
+        if (_interactable?.tag == "ShopTrigger")
         {
             Debug.Log("Interact with shop");
         }
