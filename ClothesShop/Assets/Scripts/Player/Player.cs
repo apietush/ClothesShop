@@ -5,6 +5,10 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private GameObject menu;
+
+    [SerializeField] public SpriteRenderer ShirtSprite;
+    [SerializeField] public SpriteRenderer BootsSprite;
+    [SerializeField] public SpriteRenderer PantsSprite;
     
     private float _xVelocity;
     private float _yVelocity;

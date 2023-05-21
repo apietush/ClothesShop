@@ -21,6 +21,11 @@ public class ShopMenu : MonoBehaviour
 
     [SerializeField] private Player player;
 
+    [SerializeField] private Image ShirtPreviewSprite;
+    [SerializeField] private Image BootsPreviewSprite;
+    [SerializeField] private Image PantsPreviewSprite;
+
+
     private LinkedList<Offer> _currentList;
     private int _index;
 
@@ -65,14 +70,27 @@ public class ShopMenu : MonoBehaviour
     public void OnBuyPressed()
     {
         var offer = _currentList.ElementAt(_index);
-        if (player.PlayerState.OwnedOffers.Contains(offer) )
+
+        if (player.PlayerState.OwnedOffers.Contains(offer))
         {
+            if (offer.ClothesType == ClothesType.Boots)
+            {
+                player.BootsSprite.sprite = offer.Icon;
+            }
+            else if (offer.ClothesType == ClothesType.Pants)
+            {
+                player.PantsSprite.sprite  = offer.Icon;
+            }
+            else if (offer.ClothesType == ClothesType.Shirt)
+            {
+                player.ShirtSprite.sprite = offer.Icon;
+            }
             return;
         }
-        player.PlayerState.OwnedOffers.Add(offer);
-        player.PlayerState.GoldAmount -=offer.Price;
 
-        BuyButtonText.text = player.PlayerState.OwnedOffers.Contains(offer) ? "Equip" : "Buy";
+        player.PlayerState.OwnedOffers.Add(offer);
+        player.PlayerState.GoldAmount -= offer.Price;
+
     }
 
     public void OnSellPressed()
@@ -99,7 +117,19 @@ public class ShopMenu : MonoBehaviour
         CurrentItemSprite.sprite = offer.Icon;
         CurrentItemPrice.text = offer.Price.ToString();
 
-        BuyButtonText.text = player.PlayerState.OwnedOffers.Contains(offer) ? "Equip" : "Buy";
+
+        if (offer.ClothesType == ClothesType.Boots)
+        {
+            BootsPreviewSprite.sprite = offer.Icon;
+        }
+        else if (offer.ClothesType == ClothesType.Pants)
+        {
+            PantsPreviewSprite.sprite = offer.Icon;
+        }
+        else if (offer.ClothesType == ClothesType.Shirt)
+        {
+            ShirtPreviewSprite.sprite = offer.Icon;
+        }
     }
 
 
@@ -107,6 +137,7 @@ public class ShopMenu : MonoBehaviour
     public void Update()
     {
         var offer = _currentList.ElementAt(_index);
+        BuyButtonText.text = player.PlayerState.OwnedOffers.Contains(offer) ? "Equip" : "Buy";
 
         GoldAmount.text = $"Gold: {player.PlayerState.GoldAmount.ToString()}";
         BuyButton.interactable = offer.Price <= player.PlayerState.GoldAmount;
