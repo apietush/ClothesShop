@@ -7,26 +7,44 @@ using UnityEngine.UI;
 
 public class ShopMenu : MonoBehaviour
 {
+    // used for placeholder formula for economy
+    private const int SellTax = 5;
+
+    [Header("PrefabUtilities")]
     [SerializeField] private GameObject SwitherButtonPrefab;
     [SerializeField] private GameObject SwitherRoot;
+
+    [Header("Configs")]
     [SerializeField] private OffersReference OffersList;
 
-    [SerializeField] private Image CurrentItemSprite;
+    [Header("Dependencies")]
+    [SerializeField] private Player player;
+
+    [Header("ChildComponents")]
     [SerializeField] private TextMeshProUGUI CurrentItemPrice;
+    [SerializeField] private TextMeshProUGUI CurrentItemId;
 
     [SerializeField] private TextMeshProUGUI BuyButtonText;
     [SerializeField] private TextMeshProUGUI GoldAmount;
     [SerializeField] private Button BuyButton;
     [SerializeField] private Button SellButton;
 
-    [SerializeField] private Player player;
+    [Header("Preview sprites")]
+    [SerializeField] private Image BodyPreviewSprite;
+    [SerializeField] private Image HeadPreviewSprite;
+    [SerializeField] private Image LeftHandPreviewSprite;
+    [SerializeField] private Image RightHandPreviewSprite;
 
-    [SerializeField] private Image ShirtPreviewSprite;
-    [SerializeField] private Image BootsPreviewSprite;
-    [SerializeField] private Image PantsPreviewSprite;
+    [SerializeField] private Image LeftLegPreviewSprite;
+    [SerializeField] private Image RightLegPreviewSprite;
+
+    [SerializeField] private Image LeftFootPreviewSprite;
+    [SerializeField] private Image RightFootPreviewSprite;
 
 
     private LinkedList<Offer> _currentList;
+    private Offer _currentOffer;
+    private List<ShopSwitcher> _switcherButtons = new List<ShopSwitcher>(3);
     private int _index;
 
 
@@ -41,10 +59,12 @@ public class ShopMenu : MonoBehaviour
             var switcher = switcherButton.GetComponent<ShopSwitcher>();
             switcher.Initialize(type);
             switcher.Switched += OnShopSwitched;
-        }
 
-        _currentList = new LinkedList<Offer>(OffersList.Offers.Where(x => x.ClothesType.ToString() == clothesTypes.First()));
-        ChangeCurrentItem();
+            _switcherButtons.Add(switcher);
+
+            _currentList = new LinkedList<Offer>(OffersList.Offers.Where(x => x.ClothesType.ToString() == clothesTypes.First()));
+            ChangeCurrentItem();
+        }
     }
 
     private void OnShopSwitched(string currentType)
@@ -69,40 +89,21 @@ public class ShopMenu : MonoBehaviour
 
     public void OnBuyPressed()
     {
-        var offer = _currentList.ElementAt(_index);
-
-        if (player.PlayerState.OwnedOffers.Contains(offer))
+        if (player.PlayerState.OwnedOffers.Contains(_currentOffer))
         {
-            if (offer.ClothesType == ClothesType.Boots)
-            {
-                player.BootsSprite.sprite = offer.Icon;
-            }
-            else if (offer.ClothesType == ClothesType.Pants)
-            {
-                player.PantsSprite.sprite  = offer.Icon;
-            }
-            else if (offer.ClothesType == ClothesType.Shirt)
-            {
-                player.ShirtSprite.sprite = offer.Icon;
-            }
+            player.Equip(_currentOffer);
             return;
         }
 
-        player.PlayerState.OwnedOffers.Add(offer);
-        player.PlayerState.GoldAmount -= offer.Price;
+        player.PlayerState.GoldAmount -= _currentOffer.Price;
+        player.OnClothesBought(_currentOffer);
 
     }
 
     public void OnSellPressed()
     {
-        var offer = _currentList.ElementAt(_index);
-        if (player.PlayerState.OwnedOffers.Contains(offer) == false)
-        {
-            return;
-        }
-
-        player.PlayerState.OwnedOffers.Remove(offer);
-        player.PlayerState.GoldAmount += offer.Price - 5;
+        player.PlayerState.GoldAmount += _currentOffer.Price - SellTax;
+        player.OnClothesSelled(_currentOffer);
     }
 
     public void OnCloseClicked()
@@ -113,22 +114,27 @@ public class ShopMenu : MonoBehaviour
     private void ChangeCurrentItem()
     {
         var offer = _currentList.ElementAt(_index);
+        _currentOffer = offer;
 
-        CurrentItemSprite.sprite = offer.Icon;
+        CurrentItemId.text = offer.Id;
         CurrentItemPrice.text = offer.Price.ToString();
 
 
         if (offer.ClothesType == ClothesType.Boots)
         {
-            BootsPreviewSprite.sprite = offer.Icon;
+            LeftFootPreviewSprite.sprite = offer.LeftFoot;
+            RightFootPreviewSprite.sprite = offer.RightFoot;
         }
         else if (offer.ClothesType == ClothesType.Pants)
         {
-            PantsPreviewSprite.sprite = offer.Icon;
+            LeftLegPreviewSprite.sprite = offer.LeftLeg;
+            RightLegPreviewSprite.sprite = offer.RightLeg;
         }
         else if (offer.ClothesType == ClothesType.Shirt)
         {
-            ShirtPreviewSprite.sprite = offer.Icon;
+            LeftHandPreviewSprite.sprite = offer.LeftHand;
+            RightHandPreviewSprite.sprite = offer.RightHand;
+            BodyPreviewSprite.sprite = offer.Body;
         }
     }
 
@@ -136,11 +142,28 @@ public class ShopMenu : MonoBehaviour
     // Update is called once per frame
     public void Update()
     {
-        var offer = _currentList.ElementAt(_index);
-        BuyButtonText.text = player.PlayerState.OwnedOffers.Contains(offer) ? "Equip" : "Buy";
+        BuyButtonText.text = player.PlayerState.OwnedOffers.Contains(_currentOffer) ? "Equip" : "Buy";
 
-        GoldAmount.text = $"Gold: {player.PlayerState.GoldAmount.ToString()}";
-        BuyButton.interactable = offer.Price <= player.PlayerState.GoldAmount;
-        SellButton.interactable = player.PlayerState.OwnedOffers.Contains(offer);
+        GoldAmount.text = player.PlayerState.GoldAmount.ToString();
+
+
+        if (_currentOffer.Price > player.PlayerState.GoldAmount || player.PlayerState.EquippedOffers.Contains(_currentOffer))
+        {
+            BuyButton.interactable = false;
+        }
+        else
+        {
+            BuyButton.interactable = true;
+        }
+
+        SellButton.interactable = player.PlayerState.OwnedOffers.Contains(_currentOffer);
+    }
+
+    protected void OnDestroy()
+    {
+        foreach (var switcher in _switcherButtons)
+        {
+            switcher.Switched -= OnShopSwitched;
+        }
     }
 }

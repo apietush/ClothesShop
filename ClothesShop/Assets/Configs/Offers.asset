@@ -13,27 +13,69 @@ MonoBehaviour:
   m_Name: Offers
   m_EditorClassIdentifier: 
   Offers:
-  - Id: Pants1
+  - Id: Jeans
     Price: 30
-    Icon: {fileID: 21300096, guid: a07735877a3bd644094331b137b71878, type: 3}
+    Icon: {fileID: 0}
+    LeftHand: {fileID: 0}
+    RightHand: {fileID: 0}
+    LeftFoot: {fileID: 0}
+    RightFoot: {fileID: 0}
+    LeftLeg: {fileID: -2062545887, guid: 26a43bd3d4536864385491dc62631532, type: 3}
+    RightLeg: {fileID: 823024147, guid: 26a43bd3d4536864385491dc62631532, type: 3}
+    Body: {fileID: 0}
     ClothesType: 1
-  - Id: Shirt1
+  - Id: Green Shirt
     Price: 20
-    Icon: {fileID: 21300092, guid: 1c9ed9d1200c29d4cbfd2071028c1cd5, type: 3}
+    Icon: {fileID: 0}
+    LeftHand: {fileID: 237029423, guid: 26a43bd3d4536864385491dc62631532, type: 3}
+    RightHand: {fileID: 2008380058, guid: 26a43bd3d4536864385491dc62631532, type: 3}
+    LeftFoot: {fileID: 0}
+    RightFoot: {fileID: 0}
+    LeftLeg: {fileID: 0}
+    RightLeg: {fileID: 0}
+    Body: {fileID: 1692512204, guid: 26a43bd3d4536864385491dc62631532, type: 3}
     ClothesType: 0
-  - Id: Boots1
+  - Id: Sneakers
     Price: 10
-    Icon: {fileID: 21300068, guid: ed7554aeefd5da44a9fe1ee9b93afe77, type: 3}
+    Icon: {fileID: 0}
+    LeftHand: {fileID: 0}
+    RightHand: {fileID: 0}
+    LeftFoot: {fileID: 112421764, guid: 26a43bd3d4536864385491dc62631532, type: 3}
+    RightFoot: {fileID: -303418767, guid: 26a43bd3d4536864385491dc62631532, type: 3}
+    LeftLeg: {fileID: 0}
+    RightLeg: {fileID: 0}
+    Body: {fileID: 0}
     ClothesType: 2
-  - Id: Shirt2
+  - Id: Blouse
     Price: 15
-    Icon: {fileID: 21300070, guid: 1c9ed9d1200c29d4cbfd2071028c1cd5, type: 3}
+    Icon: {fileID: 0}
+    LeftHand: {fileID: -1162985532, guid: 26a43bd3d4536864385491dc62631532, type: 3}
+    RightHand: {fileID: -43137239, guid: 26a43bd3d4536864385491dc62631532, type: 3}
+    LeftFoot: {fileID: 0}
+    RightFoot: {fileID: 0}
+    LeftLeg: {fileID: 0}
+    RightLeg: {fileID: 0}
+    Body: {fileID: -1463521131, guid: 26a43bd3d4536864385491dc62631532, type: 3}
     ClothesType: 0
-  - Id: Pants2
+  - Id: Black pants
     Price: 25
-    Icon: {fileID: 21300080, guid: a07735877a3bd644094331b137b71878, type: 3}
+    Icon: {fileID: 0}
+    LeftHand: {fileID: 0}
+    RightHand: {fileID: 0}
+    LeftFoot: {fileID: 0}
+    RightFoot: {fileID: 0}
+    LeftLeg: {fileID: -734216711, guid: 26a43bd3d4536864385491dc62631532, type: 3}
+    RightLeg: {fileID: -1486446693, guid: 26a43bd3d4536864385491dc62631532, type: 3}
+    Body: {fileID: 0}
     ClothesType: 1
-  - Id: Boots2
+  - Id: Red boots
     Price: 28
-    Icon: {fileID: 21300062, guid: ed7554aeefd5da44a9fe1ee9b93afe77, type: 3}
+    Icon: {fileID: 0}
+    LeftHand: {fileID: 0}
+    RightHand: {fileID: 0}
+    LeftFoot: {fileID: 1659746189, guid: 26a43bd3d4536864385491dc62631532, type: 3}
+    RightFoot: {fileID: 1527341867, guid: 26a43bd3d4536864385491dc62631532, type: 3}
+    LeftLeg: {fileID: 0}
+    RightLeg: {fileID: 0}
+    Body: {fileID: 0}
     ClothesType: 2
