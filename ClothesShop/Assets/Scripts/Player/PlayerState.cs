@@ -13,7 +13,7 @@ public class PlayerState
 
     public void RemoveClothes(Offer offer)
     {
-        OwnedOffers.Add(offer);
+        OwnedOffers.Remove(offer);
 
         if (EquippedOffers.Contains(offer))
         {
